@@ -36,7 +36,7 @@ Then open `http://localhost:8080`.
 
 Routine progress is stored per day on that device, so you can tick each step off as you go.
 
-Camera barcode scanning works best once the app is hosted over `https://` or run on `localhost`. If the browser cannot access live scanning, you can still type or paste the barcode manually.
+Camera barcode scanning works best once the app is hosted over `https://` or run on `localhost`. On iPhone Safari, GlowTrack now falls back to a Safari-friendly scanner library when the native browser barcode API is unavailable. If the browser still cannot access live scanning, you can type or paste the barcode manually.
 
 ## Security notes
 
