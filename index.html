@@ -37,6 +37,7 @@
         <p class="muted">Export a backup or import one later.</p>
         <div class="stack">
           <button id="export-data" class="secondary-button">Export JSON</button>
+          <button id="copy-history" class="secondary-button">Copy last 7 days</button>
           <label class="file-button">
             <span>Import JSON</span>
             <input id="import-data" type="file" accept="application/json">
@@ -44,6 +45,7 @@
           <button id="seed-demo" class="ghost-button">Load sample data</button>
           <button id="reset-data" class="ghost-button danger">Reset everything</button>
         </div>
+        <p id="history-feedback" class="helper"></p>
       </section>
     </aside>
 
