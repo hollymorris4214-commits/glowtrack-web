@@ -1,5 +1,5 @@
 const STORAGE_KEY = "glowtrack-web-data-v2";
-const APP_VERSION = "1.2.0";
+const APP_VERSION = "1.3.0";
 const MAX_IMPORT_BYTES = 1024 * 1024;
 const BARCODE_FORMATS = ["ean_13", "ean_8", "upc_a", "upc_e", "code_128", "code_39", "itf"];
 
@@ -16,6 +16,8 @@ let scannerState = {
   stream: null,
   intervalId: null,
   detector: null,
+  reader: null,
+  readerControls: null,
   targetInput: null
 };
 
@@ -179,24 +181,65 @@ async function openScannerDialog(mode, targetInput = "") {
     scannerDialog.setAttribute("open", "open");
   }
 
-  if (!("BarcodeDetector" in window) || !navigator.mediaDevices?.getUserMedia || !window.isSecureContext) {
-    scannerStatus.textContent = "Live camera scanning needs HTTPS and a supported browser. You can still type the barcode manually.";
+  if (!navigator.mediaDevices?.getUserMedia || !window.isSecureContext) {
+    scannerStatus.textContent = "Live camera scanning needs HTTPS and camera access. You can still type the barcode manually.";
     return;
   }
 
   try {
-    scannerState.detector = new BarcodeDetector({ formats: BARCODE_FORMATS });
-    scannerState.stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: "environment" } },
-      audio: false
-    });
-    scannerVideo.srcObject = scannerState.stream;
-    await scannerVideo.play();
-    scannerState.intervalId = window.setInterval(scanCurrentFrame, 700);
-    scannerStatus.textContent = "Scanning...";
+    if ("BarcodeDetector" in window) {
+      await startNativeBarcodeScanner();
+      return;
+    }
+
+    if (window.ZXing?.BrowserMultiFormatReader) {
+      await startZxingScanner();
+      return;
+    }
+
+    scannerStatus.textContent = "This browser can open the camera, but barcode scanning is not available here yet. You can still type the barcode manually.";
   } catch (error) {
     scannerStatus.textContent = "Camera access was unavailable. You can still enter the barcode manually.";
   }
+}
+
+async function startNativeBarcodeScanner() {
+  scannerState.detector = new BarcodeDetector({ formats: BARCODE_FORMATS });
+  scannerState.stream = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: { ideal: "environment" } },
+    audio: false
+  });
+  scannerVideo.srcObject = scannerState.stream;
+  await scannerVideo.play();
+  scannerState.intervalId = window.setInterval(scanCurrentFrame, 700);
+  scannerStatus.textContent = "Scanning...";
+}
+
+async function startZxingScanner() {
+  scannerState.reader = new window.ZXing.BrowserMultiFormatReader();
+  scannerState.readerControls = await scannerState.reader.decodeFromConstraints(
+    {
+      video: {
+        facingMode: { ideal: "environment" }
+      },
+      audio: false
+    },
+    scannerVideo,
+    (result, error, controls) => {
+      if (controls) scannerState.readerControls = controls;
+      if (result?.text) {
+        const rawValue = normaliseBarcode(result.text);
+        if (!rawValue) return;
+        applyScannedBarcode(rawValue);
+        closeScannerDialog();
+        return;
+      }
+      if (error?.name && error.name !== "NotFoundException") {
+        scannerStatus.textContent = "Camera is open, but the barcode has not locked in yet. Try moving slightly closer.";
+      }
+    }
+  );
+  scannerStatus.textContent = "Scanning with Safari-compatible mode...";
 }
 
 async function scanCurrentFrame() {
@@ -238,6 +281,19 @@ function closeScannerDialog() {
     window.clearInterval(scannerState.intervalId);
     scannerState.intervalId = null;
   }
+  if (scannerState.readerControls?.stop) {
+    try {
+      scannerState.readerControls.stop();
+    } catch {}
+    scannerState.readerControls = null;
+  }
+  if (scannerState.reader?.reset) {
+    try {
+      scannerState.reader.reset();
+    } catch {}
+    scannerState.reader = null;
+  }
+  scannerState.detector = null;
   if (scannerState.stream) {
     scannerState.stream.getTracks().forEach((track) => track.stop());
     scannerState.stream = null;
