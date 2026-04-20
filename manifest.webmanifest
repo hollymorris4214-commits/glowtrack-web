@@ -1,0 +1,16 @@
+{
+  "name": "GlowTrack",
+  "short_name": "GlowTrack",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff6ef",
+  "theme_color": "#fff6ef",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
