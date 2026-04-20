@@ -44,6 +44,7 @@ const scannerStatus = document.getElementById("scanner-status");
 const scannerManualInput = document.getElementById("scanner-manual-input");
 const scannerApplyButton = document.getElementById("scanner-apply-button");
 const scannerCloseButton = document.getElementById("scanner-close-button");
+const historyFeedback = document.getElementById("history-feedback");
 
 document.querySelectorAll(".nav-tab").forEach((button) => {
   button.addEventListener("click", () => switchTab(button.dataset.tab));
@@ -54,6 +55,7 @@ document.querySelectorAll("[data-open-modal]").forEach((button) => {
 });
 
 document.getElementById("export-data").addEventListener("click", exportData);
+document.getElementById("copy-history").addEventListener("click", () => copyRecentHistory(7));
 document.getElementById("import-data").addEventListener("change", importData);
 document.getElementById("seed-demo").addEventListener("click", seedDemoData);
 document.getElementById("reset-data").addEventListener("click", resetData);
@@ -768,6 +770,111 @@ function exportData() {
   anchor.download = `glowtrack-backup-${todayIso()}.json`;
   anchor.click();
   URL.revokeObjectURL(url);
+}
+
+async function copyRecentHistory(days = 7) {
+  const summary = buildRecentHistorySummary(days);
+  const copied = await copyText(summary);
+  setHistoryFeedback(
+    copied
+      ? `Copied the last ${days} days of routine history. Paste it straight into chat.`
+      : `Could not copy automatically. A text window will open so you can copy the history manually.`
+  );
+  if (!copied) {
+    window.prompt("Copy your recent GlowTrack history:", summary);
+  }
+}
+
+function buildRecentHistorySummary(days = 7) {
+  const lines = [
+    `GlowTrack recent history`,
+    `Generated: ${new Date().toLocaleString()}`,
+    `Window: last ${days} days`,
+    ""
+  ];
+
+  for (let offset = 0; offset < days; offset += 1) {
+    const date = new Date();
+    date.setDate(date.getDate() - offset);
+    const dateKey = date.toISOString().slice(0, 10);
+    const dayRoutines = buildRoutineHistoryForDate(dateKey);
+    const journalEntry = state.journal.find((entry) => entry.date === dateKey);
+
+    lines.push(`${formatDate(dateKey)} (${dayName(date)})`);
+
+    if (dayRoutines.length) {
+      dayRoutines.forEach((item) => lines.push(`- ${item}`));
+    } else {
+      lines.push("- No routine steps were checked off.");
+    }
+
+    if (journalEntry) {
+      const journalBits = [];
+      if (journalEntry.skinCondition) journalBits.push(`skin: ${journalEntry.skinCondition}`);
+      if (journalEntry.hydration) journalBits.push(`hydration: ${journalEntry.hydration}/5`);
+      if (journalEntry.mood) journalBits.push(`mood: ${journalEntry.mood}/5`);
+      if (journalEntry.sleepHours) journalBits.push(`sleep: ${journalEntry.sleepHours}h`);
+      if (journalBits.length) {
+        lines.push(`- Journal: ${journalBits.join(", ")}`);
+      }
+      if (journalEntry.notes) {
+        lines.push(`- Notes: ${journalEntry.notes}`);
+      }
+    }
+
+    lines.push("");
+  }
+
+  return lines.join("\n").trim();
+}
+
+function buildRoutineHistoryForDate(dateKey) {
+  return state.routines.reduce((items, routine) => {
+    const progress = getRoutineProgressForDate(dateKey, routine.id, routine.steps.length);
+    const completedSteps = routine.steps
+      .filter((step, index) => progress[index])
+      .map((step) => step.label);
+
+    if (!completedSteps.length) return items;
+
+    items.push(`${routine.name}: ${completedSteps.join("; ")}`);
+    return items;
+  }, []);
+}
+
+function getRoutineProgressForDate(dateKey, routineId, stepCount) {
+  const existing = state.progress[dateKey]?.[routineId];
+  return Array.from({ length: stepCount }, (_, index) => Boolean(existing?.[index]));
+}
+
+async function copyText(value) {
+  try {
+    if (navigator.clipboard?.writeText && window.isSecureContext) {
+      await navigator.clipboard.writeText(value);
+      return true;
+    }
+  } catch {}
+
+  try {
+    const fallback = document.createElement("textarea");
+    fallback.value = value;
+    fallback.setAttribute("readonly", "readonly");
+    fallback.style.position = "fixed";
+    fallback.style.top = "-9999px";
+    document.body.appendChild(fallback);
+    fallback.select();
+    const copied = document.execCommand("copy");
+    document.body.removeChild(fallback);
+    return copied;
+  } catch {
+    return false;
+  }
+}
+
+function setHistoryFeedback(message, isError = false) {
+  if (!historyFeedback) return;
+  historyFeedback.textContent = message;
+  historyFeedback.classList.toggle("danger-text", isError);
 }
 
 function importData(event) {
