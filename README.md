@@ -18,6 +18,8 @@ Then open `http://localhost:8080`.
 ## What it does
 
 - Tracks skincare inventory
+- Manages reusable product categories
+- Manages reusable ingredient records and links them to products
 - Builds routines by day
 - Logs journal entries
 - Shows lightweight analytics
@@ -37,6 +39,8 @@ Then open `http://localhost:8080`.
 Routine progress is stored per day on that device, so you can tick each step off as you go.
 
 Camera barcode scanning works best once the app is hosted over `https://` or run on `localhost`. On iPhone Safari, GlowTrack now falls back to a Safari-friendly scanner library when the native browser barcode API is unavailable. If the browser still cannot access live scanning, you can type or paste the barcode manually.
+
+Categories and ingredients are managed in the Library tab. Products use the category picker from that list, and ingredients can be linked from existing records or added by pasting ingredient names while editing a product.
 
 ## Security notes
 
