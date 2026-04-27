@@ -1,0 +1,50 @@
+.status-testing { background: rgba(204, 127, 125, 0.16); color: #8f4d51; }
+.status-retired { background: rgba(82, 58, 41, 0.12); color: #5a4539; }
+
+.warning-pill {
+  background: rgba(216, 179, 112, 0.24);
+  color: #77551f;
+}
+
+.danger-pill {
+  background: rgba(184, 90, 83, 0.16);
+  color: #873c36;
+}
+
+.info-pill {
+  background: rgba(127, 155, 134, 0.16);
+  color: #4f6655;
+}
+
+.import-card {
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.48);
+  padding: 16px;
+  margin: 18px 0;
+}
+
+.quick-template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.quick-template {
+  min-height: 48px;
+}
+
+.compact-textarea {
+  min-height: 150px;
+}
+
+.skip-note {
+  margin-top: 12px;
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(184, 90, 83, 0.12);
+  color: #873c36;
+  font-weight: 700;
+}
