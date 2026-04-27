@@ -28,6 +28,7 @@
       <nav class="nav-tabs" aria-label="Primary">
         <button class="nav-tab is-active" data-tab="dashboard">Dashboard</button>
         <button class="nav-tab" data-tab="inventory">Inventory</button>
+        <button class="nav-tab" data-tab="library">Library</button>
         <button class="nav-tab" data-tab="routines">Routines</button>
         <button class="nav-tab" data-tab="journal">Journal</button>
       </nav>
@@ -118,6 +119,32 @@
         </section>
       </section>
 
+      <section id="tab-library" class="tab-panel">
+        <div class="content-grid">
+          <section class="panel">
+            <div class="section-heading">
+              <div>
+                <h3>Categories</h3>
+                <p class="muted">The picker used when adding or editing products.</p>
+              </div>
+              <button class="primary-button" data-open-modal="category">New category</button>
+            </div>
+            <div id="category-list" class="stack"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading">
+              <div>
+                <h3>Ingredients</h3>
+                <p class="muted">Reusable ingredient records linked to products.</p>
+              </div>
+              <button class="primary-button" data-open-modal="ingredient">New ingredient</button>
+            </div>
+            <div id="ingredient-list" class="stack"></div>
+          </section>
+        </div>
+      </section>
+
       <section id="tab-routines" class="tab-panel">
         <section class="panel">
           <div class="section-heading">
@@ -190,5 +217,6 @@
 
   <script src="https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js"></script>
   <script src="./mobile-app.js"></script>
+  <script src="./library-upgrade.js"></script>
 </body>
 </html>
