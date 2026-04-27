@@ -1,1 +1,233 @@
-<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>GlowTrack Web</title><meta http-equiv='Content-Security-Policy' content='default-src &#39;self&#39;; script-src &#39;self&#39; https://unpkg.com; style-src &#39;self&#39; &#39;unsafe-inline&#39;; img-src &#39;self&#39; data: blob:; connect-src &#39;self&#39; https://unpkg.com; manifest-src &#39;self&#39;; worker-src &#39;self&#39;; media-src &#39;self&#39; blob:; object-src &#39;none&#39;; base-uri &#39;none&#39;; form-action &#39;self&#39;; frame-ancestors &#39;none&#39;; upgrade-insecure-requests'><meta name='referrer' content='no-referrer'><meta http-equiv='Permissions-Policy' content='camera=(self), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()'><meta name='theme-color' content='#fff6ef'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='default'><meta name='apple-mobile-web-app-title' content='GlowTrack'><link rel='manifest' href='./manifest.webmanifest'><link rel='icon' href='./icon.svg' type='image/svg+xml'><link rel='apple-touch-icon' href='./icon.svg'><link rel='stylesheet' href='./styles.css'><link rel='stylesheet' href='./compliance-upgrade.css'></head><body><div class='page-shell'><aside class='sidebar'><div class='brand-block'><p class='eyebrow'>GlowTrack</p><h1>Your skincare shelf, routine, and journal in one place.</h1><p class='brand-copy'>This version runs entirely in your browser on Windows and saves your data locally.</p></div><nav class='nav-tabs' aria-label='Primary'><button class='nav-tab is-active' data-tab='dashboard'>Dashboard</button><button class='nav-tab' data-tab='inventory'>Inventory</button><button class='nav-tab' data-tab='library'>Library</button><button class='nav-tab' data-tab='routines'>Routines</button><button class='nav-tab' data-tab='journal'>Journal</button><button class='nav-tab' data-tab='data'>Data</button></nav></aside><main class='main-content'><section class='hero-card'><div><p class='eyebrow'>Windows-friendly web app</p><h2 id='hero-heading'>Keep track of products, routines, and skin changes without needing Xcode.</h2></div><div class='hero-actions'><button class='primary-button' data-open-modal='inventory'>Add product</button><button class='secondary-button' data-open-modal='routine'>Add routine</button><button class='secondary-button' data-open-modal='journal'>Log today</button></div></section><section id='tab-dashboard' class='tab-panel is-active'><div class='stats-grid' id='stats-grid'></div><div class='content-grid'><section class='panel'><div class='section-heading'><h3>Expiring Soon</h3><span class='muted'>Next 30 days</span></div><div id='expiring-list' class='list-block'></div></section><section class='panel'><div class='section-heading'><h3>Today\'s Routine</h3><span class='muted' id='today-label'></span></div><p class='helper install-note'>On iPhone, open this in Safari and use Share -> Add to Home Screen for faster access.</p><div id='today-routine' class='list-block'></div></section></div></section><section id='tab-inventory' class='tab-panel'><section class='panel'><div class='section-heading'><div><h3>Inventory</h3><p class='muted'>Everything on your shelf in one searchable list.</p></div><button class='primary-button' data-open-modal='inventory'>New product</button></div><div class='toolbar'><input id='inventory-search' class='text-input' type='search' placeholder='Search brand, product, category'><select id='inventory-filter' class='text-input'><option value='all'>All statuses</option><option value='active'>Active</option><option value='unopened'>Unopened</option><option value='paused'>Paused</option><option value='depleted'>Depleted</option></select></div><div class='scan-toolbar'><input id='barcode-lookup' class='text-input' type='text' inputmode='numeric' autocomplete='off' placeholder='Scan or enter barcode'><button id='scan-in-button' class='secondary-button' type='button'>Scan in</button><button id='scan-out-button' class='secondary-button' type='button'>Scan out</button><button id='camera-scan-button' class='ghost-button' type='button'>Use camera</button></div><p id='barcode-feedback' class='helper'></p><div id='inventory-list' class='card-grid'></div></section></section><section id='tab-library' class='tab-panel'><div class='content-grid'><section class='panel'><div class='section-heading'><div><h3>Categories</h3><p class='muted'>The picker used when adding or editing products.</p></div><button class='primary-button' data-open-modal='category'>New category</button></div><div id='category-list' class='stack'></div></section><section class='panel'><div class='section-heading'><div><h3>Ingredients</h3><p class='muted'>Reusable ingredient records linked to products.</p></div><button class='primary-button' data-open-modal='ingredient'>New ingredient</button></div><div id='ingredient-list' class='stack'></div></section></div></section><section id='tab-routines' class='tab-panel'><section class='panel'><div class='section-heading'><div><h3>Routines</h3><p class='muted'>Build simple morning and evening flows tied to the products you own.</p></div><button class='primary-button' data-open-modal='routine'>New routine</button></div><div id='routine-list' class='stack'></div></section></section><section id='tab-journal' class='tab-panel'><div class='content-grid'><section class='panel'><div class='section-heading'><div><h3>Journal Entries</h3><p class='muted'>Track mood, hydration, and what your skin looked like that day.</p></div><button class='primary-button' data-open-modal='journal'>New entry</button></div><div id='journal-list' class='stack'></div></section><section class='panel accent-panel'><div class='section-heading'><h3>Patterns</h3><span class='muted'>Simple browser analytics</span></div><div id='pattern-list' class='stack compact'></div></section></div></section><section id='tab-data' class='tab-panel'><section class='panel soft-panel data-panel'><div class='section-heading'><div><h3>Data</h3><p class='muted'>Back up, restore, or copy recent context for ChatGPT.</p></div></div><div class='stack'><button id='export-data' class='secondary-button'>Export JSON</button><button id='copy-history' class='secondary-button'>Copy last 7 days</button><label class='file-button'><span>Import JSON file</span><input id='import-data' type='file' accept='application/json'></label><button id='seed-demo' class='ghost-button'>Load sample data</button><button id='reset-data' class='ghost-button danger'>Reset everything</button></div><p id='history-feedback' class='helper'></p></section></section></main></div><div id='modal-root'></div><dialog id='scanner-dialog' class='scanner-dialog'><form method='dialog' class='scanner-card'><div class='section-heading'><h3 id='scanner-title'>Barcode scanner</h3><button class='icon-button' id='scanner-close-button' type='submit' aria-label='Close'>x</button></div><video id='scanner-video' class='scanner-video' autoplay playsinline muted></video><p id='scanner-status' class='helper'>Point your camera at a product barcode.</p><div class='field'><label for='scanner-manual-input'>Manual fallback</label><input id='scanner-manual-input' class='text-input' type='text' inputmode='numeric' autocomplete='off' placeholder='Enter barcode manually'></div><div class='modal-actions'><button id='scanner-apply-button' class='secondary-button' type='button'>Use code</button><button class='ghost-button' type='submit'>Cancel</button></div></form></dialog><template id='modal-template'><div class='modal-backdrop'><div class='modal-card'><div class='section-heading'><h3 class='modal-title'></h3><button class='icon-button modal-close' aria-label='Close'>x</button></div><div class='modal-body'></div></div></div></template><script src='https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js'></script><script src='./mobile-app.js'></script><script src='./library-upgrade.js'></script><script src='./compliance-upgrade.js'></script><script src='./compliance-hotfix.js'></script><script src='./paste-import-upgrade.js'></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlowTrack Web</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://unpkg.com; manifest-src 'self'; worker-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Permissions-Policy" content="camera=(self), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()">
+  <meta name="theme-color" content="#fff6ef">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="GlowTrack">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./compliance-upgrade.css">
+</head>
+<body>
+  <div class="page-shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <p class="eyebrow">GlowTrack</p>
+        <h1>Your skincare shelf, routine, and journal in one place.</h1>
+        <p class="brand-copy">This version runs entirely in your browser on Windows and saves your data locally.</p>
+      </div>
+
+      <nav class="nav-tabs" aria-label="Primary">
+        <button class="nav-tab is-active" data-tab="dashboard">Dashboard</button>
+        <button class="nav-tab" data-tab="inventory">Inventory</button>
+        <button class="nav-tab" data-tab="library">Library</button>
+        <button class="nav-tab" data-tab="routines">Routines</button>
+        <button class="nav-tab" data-tab="journal">Journal</button>
+        <button class="nav-tab" data-tab="data">Data</button>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <section class="hero-card">
+        <div>
+          <p class="eyebrow">Windows-friendly web app</p>
+          <h2 id="hero-heading">Keep track of products, routines, and skin changes without needing Xcode.</h2>
+        </div>
+        <div class="hero-actions">
+          <button class="primary-button" data-open-modal="inventory">Add product</button>
+          <button class="secondary-button" data-open-modal="routine">Add routine</button>
+          <button class="secondary-button" data-open-modal="journal">Log today</button>
+        </div>
+      </section>
+
+      <section id="tab-dashboard" class="tab-panel is-active">
+        <div class="stats-grid" id="stats-grid"></div>
+
+        <div class="content-grid">
+          <section class="panel">
+            <div class="section-heading">
+              <h3>Expiring Soon</h3>
+              <span class="muted">Next 30 days</span>
+            </div>
+            <div id="expiring-list" class="list-block"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading">
+              <h3>Today's Routine</h3>
+              <span class="muted" id="today-label"></span>
+            </div>
+            <p class="helper install-note">On iPhone, open this in Safari and use Share -> Add to Home Screen for faster access.</p>
+            <div id="today-routine" class="list-block"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="tab-inventory" class="tab-panel">
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <h3>Inventory</h3>
+              <p class="muted">Everything on your shelf in one searchable list.</p>
+            </div>
+            <button class="primary-button" data-open-modal="inventory">New product</button>
+          </div>
+
+          <div class="toolbar">
+            <input id="inventory-search" class="text-input" type="search" placeholder="Search brand, product, category">
+            <select id="inventory-filter" class="text-input">
+              <option value="all">All statuses</option>
+              <option value="active">Active</option>
+              <option value="unopened">Unopened</option>
+              <option value="paused">Paused</option>
+              <option value="depleted">Depleted</option>
+            </select>
+          </div>
+
+          <div class="scan-toolbar">
+            <input id="barcode-lookup" class="text-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Scan or enter barcode">
+            <button id="scan-in-button" class="secondary-button" type="button">Scan in</button>
+            <button id="scan-out-button" class="secondary-button" type="button">Scan out</button>
+            <button id="camera-scan-button" class="ghost-button" type="button">Use camera</button>
+          </div>
+          <p id="barcode-feedback" class="helper"></p>
+
+          <div id="inventory-list" class="card-grid"></div>
+        </section>
+      </section>
+
+      <section id="tab-library" class="tab-panel">
+        <div class="content-grid">
+          <section class="panel">
+            <div class="section-heading">
+              <div>
+                <h3>Categories</h3>
+                <p class="muted">The picker used when adding or editing products.</p>
+              </div>
+              <button class="primary-button" data-open-modal="category">New category</button>
+            </div>
+            <div id="category-list" class="stack"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading">
+              <div>
+                <h3>Ingredients</h3>
+                <p class="muted">Reusable ingredient records linked to products.</p>
+              </div>
+              <button class="primary-button" data-open-modal="ingredient">New ingredient</button>
+            </div>
+            <div id="ingredient-list" class="stack"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="tab-routines" class="tab-panel">
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <h3>Routines</h3>
+              <p class="muted">Build simple morning and evening flows tied to the products you own.</p>
+            </div>
+            <button class="primary-button" data-open-modal="routine">New routine</button>
+          </div>
+          <div id="routine-list" class="stack"></div>
+        </section>
+      </section>
+
+      <section id="tab-journal" class="tab-panel">
+        <div class="content-grid">
+          <section class="panel">
+            <div class="section-heading">
+              <div>
+                <h3>Journal Entries</h3>
+                <p class="muted">Track mood, hydration, and what your skin looked like that day.</p>
+              </div>
+              <button class="primary-button" data-open-modal="journal">New entry</button>
+            </div>
+            <div id="journal-list" class="stack"></div>
+          </section>
+
+          <section class="panel accent-panel">
+            <div class="section-heading">
+              <h3>Patterns</h3>
+              <span class="muted">Simple browser analytics</span>
+            </div>
+            <div id="pattern-list" class="stack compact"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="tab-data" class="tab-panel">
+        <section class="panel soft-panel data-panel">
+          <div class="section-heading">
+            <div>
+              <h3>Data</h3>
+              <p class="muted">Back up, restore, or copy recent context for ChatGPT.</p>
+            </div>
+          </div>
+          <div class="stack">
+            <button id="export-data" class="secondary-button">Export JSON</button>
+            <button id="copy-history" class="secondary-button">Copy last 7 days</button>
+            <label class="file-button">
+              <span>Import JSON file</span>
+              <input id="import-data" type="file" accept="application/json">
+            </label>
+            <button id="seed-demo" class="ghost-button">Load sample data</button>
+            <button id="reset-data" class="ghost-button danger">Reset everything</button>
+          </div>
+          <p id="history-feedback" class="helper"></p>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal-root"></div>
+  <dialog id="scanner-dialog" class="scanner-dialog">
+    <form method="dialog" class="scanner-card">
+      <div class="section-heading">
+        <h3 id="scanner-title">Barcode scanner</h3>
+        <button class="icon-button" id="scanner-close-button" type="submit" aria-label="Close">x</button>
+      </div>
+      <video id="scanner-video" class="scanner-video" autoplay playsinline muted></video>
+      <p id="scanner-status" class="helper">Point your camera at a product barcode.</p>
+      <div class="field">
+        <label for="scanner-manual-input">Manual fallback</label>
+        <input id="scanner-manual-input" class="text-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter barcode manually">
+      </div>
+      <div class="modal-actions">
+        <button id="scanner-apply-button" class="secondary-button" type="button">Use code</button>
+        <button class="ghost-button" type="submit">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <template id="modal-template">
+    <div class="modal-backdrop">
+      <div class="modal-card">
+        <div class="section-heading">
+          <h3 class="modal-title"></h3>
+          <button class="icon-button modal-close" aria-label="Close">x</button>
+        </div>
+        <div class="modal-body"></div>
+      </div>
+    </div>
+  </template>
+
+  <script src="https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js"></script>
+  <script src="./mobile-app.js"></script>
+  <script src="./library-upgrade.js"></script>
+  <script src="./compliance-upgrade.js"></script>
+  <script src="./compliance-hotfix.js"></script>
+  <script src="./paste-import-upgrade.js"></script>
+</body>
+</html>
