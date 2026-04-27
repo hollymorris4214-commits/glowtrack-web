@@ -64,3 +64,20 @@
   color: #873c36;
   font-weight: 700;
 }
+
+.paste-import-card {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.48);
+  padding: 12px;
+}
+
+.paste-import-card summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.paste-import-body {
+  margin-top: 12px;
+}
