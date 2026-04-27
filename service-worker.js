@@ -1,4 +1,4 @@
-const CACHE_NAME = "glowtrack-static-v5";
+const CACHE_NAME = "glowtrack-static-v6";
 const ASSETS = [
   "./",
   "./index.html",
