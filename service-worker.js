@@ -1,4 +1,4 @@
-const CACHE_NAME = "glowtrack-static-v6";
+const CACHE_NAME = "glowtrack-static-v7";
 const ASSETS = [
   "./",
   "./index.html",
@@ -8,6 +8,7 @@ const ASSETS = [
   "./library-upgrade.js",
   "./compliance-upgrade.js",
   "./compliance-hotfix.js",
+  "./paste-import-upgrade.js",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
