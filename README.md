@@ -29,6 +29,8 @@ Then open `http://localhost:8080`.
 - Tracks opened dates and period-after-opening (PAO) product windows
 - Records skipped routine reasons instead of treating missed routines as blank data
 - Maintains a simple repurchase list for depleted or manually flagged products
+- Keeps backup/export/import tools in a dedicated Data tab
+- Imports backups from either a JSON file or pasted raw JSON
 - Saves everything in browser local storage
 - Exports and imports JSON backups
 - Adds safer imports and a stricter browser security policy
@@ -47,6 +49,8 @@ Camera barcode scanning works best once the app is hosted over `https://` or run
 Categories and ingredients are managed in the Library tab. Products use the category picker from that list, and ingredients can be linked from existing records or added by pasting ingredient names while editing a product.
 
 The Routines tab includes a Fast Routine Builder. Ask ChatGPT for a routine in the shown format, paste it into GlowTrack, and the app will convert it into tickable steps. The Dashboard now includes a Today Brief for low-stock products, opened-product warnings, skipped routines, and backup status.
+
+The Data tab contains JSON export, file import, pasted raw JSON import, recent-history copy, sample data, and reset controls.
 
 ## Security notes
 
