@@ -1,10 +1,13 @@
-const CACHE_NAME = "glowtrack-static-v4";
+const CACHE_NAME = "glowtrack-static-v5";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
+  "./compliance-upgrade.css",
   "./mobile-app.js",
   "./library-upgrade.js",
+  "./compliance-upgrade.js",
+  "./compliance-hotfix.js",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
