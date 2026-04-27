@@ -1,6 +1,22 @@
 .status-testing { background: rgba(204, 127, 125, 0.16); color: #8f4d51; }
 .status-retired { background: rgba(82, 58, 41, 0.12); color: #5a4539; }
 
+.ingredient-chip-list,
+.ingredient-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ingredient-picker {
+  max-height: 180px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.42);
+}
+
 .warning-pill {
   background: rgba(216, 179, 112, 0.24);
   color: #77551f;
